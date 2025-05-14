@@ -23,16 +23,22 @@ No one but me should really be running it, but in case you really want to.
   source .venv/bin/activate
   ```
 
-4. Set up the Django migrations
+4. Download the dependenices
+
+  ```bash
+  uv sync
+  ```
+
+5. Set up the Django migrations
 
   ```bash
   uv run manage.py migrate
   ```
 
-5. Run the server on your local
+6. Run the server on your local
 
   ```bash
   uv run manage.py runserver
   ```
 
-6. Open localhost:8000 in a browser
+7. Open localhost:8000 in a browser
