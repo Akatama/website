@@ -11,14 +11,17 @@
         {% for post in posts %}
             <h4><a href="{% url 'blog_detail' post.pk %}">{{ post.title }}</a></h4>
             <small>
-                {{ post.created_on.date }} | Categories:
+                {{ post.created_on.date }} | 
+                {% if post.created_on.date != post.last_modified.date or post.created_on.time != post.last_modified.time %}
+                Last Updated: {{ post.last_modified }} | 
+                {% endif %}
+                Categories:
                 {% for category in post.categories.all %}
                     <a href="{% url 'blog_category' category.name %}">
-                         {{ category.name }}
-                    </a>
+                    {{ category.name }}</a>{% if not forloop.last %},{% endif %}
                 {% endfor %}
             </small>
-            <p>{{ post.body | slice:":400" }}...</p>
+            <p>{{ post.intro }}...</p>
         {% endfor %}
     {% endblock posts %}
 {% endblock page_content %}

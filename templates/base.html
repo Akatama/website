@@ -9,7 +9,9 @@
 </head>
 <body>
 <h1>Akatama's Slice of the Internet</h1>
-<a href="{% url "blog_index" %}">Blog</a>
+<nav>
+  <a href="{% url "blog_index" %}">Blog</a>
+<nav>
 <hr>
 {% block page_title %}{% endblock page_title %}
 {% block page_content %}{% endblock page_content %}
