@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     "blog.apps.BlogConfig",
+    "about_me.apps.AboutMeConfig",
     "markdownx",
     "django.contrib.admin",
     "django.contrib.auth",

@@ -1,0 +1,11 @@
+<!--  blog/templates/blog/detail.html -->
+
+{% extends "base.html" %}
+
+{% block page_title %}
+<h3>{{ about_me.title }}<h3>
+{% endblock page_title %}
+
+{% block page_content %}
+    <p>{{ about_me.formatted_markdown | safe}}</p>
+{% endblock page_content %}
