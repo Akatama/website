@@ -35,6 +35,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     "blog.apps.BlogConfig",
     "about_me.apps.AboutMeConfig",
+    "resume.apps.ResumeConfig",
     "markdownx",
     "django.contrib.admin",
     "django.contrib.auth",
