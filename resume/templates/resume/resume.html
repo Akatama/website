@@ -1,0 +1,7 @@
+<!--  blog/templates/blog/detail.html -->
+
+{% extends "base.html" %}
+
+{% block page_content %}
+    <p>{{ resume.formatted_markdown | safe}}</p>
+{% endblock page_content %}
