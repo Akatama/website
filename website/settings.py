@@ -16,7 +16,10 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 STATIC_ROOT = BASE_DIR / "static"
-
+STATIC_URL = "/static"
+STATICFILES_DIRS = [
+    BASE_DIR / "css",
+]
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/

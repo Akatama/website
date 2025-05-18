@@ -5,16 +5,17 @@
 <head>
     <meta charset="utf-8">
     <title>Akatama's Slice of the Internet</title>
-    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css" />
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'custom.css' %}" />
 </head>
+<header>
+  <h1>Akatama's Slice of the Internet</h1>
+  <nav>
+    {% block nav %}{% endblock nav %}
+  <nav>
+  </header>
 <body>
-<h1>Akatama's Slice of the Internet</h1>
-<nav>
-  <a href="{% url "blog_index" %}">Blog</a> |
-  <a href="{% url "about_index" %}">About Me</a> |
-  <a href="{% url "resume_index" %}">Resume</a>
-<nav>
-<hr>
 {% block page_title %}{% endblock page_title %}
 {% block page_content %}{% endblock page_content %}
 </body>

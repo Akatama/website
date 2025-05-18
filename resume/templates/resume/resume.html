@@ -2,6 +2,14 @@
 
 {% extends "base.html" %}
 
+{% block nav %}
+    <a href="{% url "blog_index" %}">Blog</a>
+    <a href="{% url "about_index" %}">About Me</a>
+    <a aria-current="true" href="{% url "resume_index" %}">Resume</a>
+{% endblock nav %}
+
+{% block page_title  %}
+{% endblock page_title %}
 {% block page_content %}
     <p>{{ resume.formatted_markdown | safe}}</p>
 {% endblock page_content %}

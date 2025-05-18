@@ -2,6 +2,13 @@
 
 {% extends "base.html" %}
 
+
+{% block nav %}
+    <a href="{% url "blog_index" %}">Blog</a>
+    <a aria-current="true" href="{% url "about_index" %}">About Me</a>
+    <a href="{% url "resume_index" %}">Resume</a>
+{% endblock nav %}
+
 {% block page_title %}
 <h3>{{ about_me.title }}<h3>
 {% endblock page_title %}
