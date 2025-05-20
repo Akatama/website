@@ -9,14 +9,14 @@
 {% endblock nav %}
 
 {% block page_title %}
-    <h3>Blog Posts</h3>
 {% endblock page_title %}
 
 {% block page_content %}
     {% block posts %}
         {% for post in posts %}
-            <h4><a href="{% url 'blog_detail' post.pk %}">{{ post.title }}</a></h4>
-            <small>
+          <div class="blog-item">
+            <h4><a class="post-link" href="{% url 'blog_detail' post.pk %}">{{ post.title }}</a></h4>
+            <small><p>
                 {{ post.created_on.date }} | 
                 {% if post.created_on.date != post.last_modified.date or post.created_on.time != post.last_modified.time %}
                 Last Updated: {{ post.last_modified }} | 
@@ -26,8 +26,9 @@
                     <a href="{% url 'blog_category' category.name %}">
                     {{ category.name }}</a>{% if not forloop.last %},{% endif %}
                 {% endfor %}
-            </small>
-            <p>{{ post.intro }}...</p>
+            </p></small>
+            <p class="meta"><i>{{ post.intro }}</i></p>
+          </div>
         {% endfor %}
     {% endblock posts %}
 {% endblock page_content %}

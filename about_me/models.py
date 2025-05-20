@@ -8,6 +8,9 @@ class AboutMe(models.Model):
     title = models.CharField(max_length=255)
     body = MarkdownxField()
 
+    class Meta:
+        verbose_name_plural = "About me"
+
     def save(self, *args, **kwargs):
         """
         Create only one About Me instance

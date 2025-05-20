@@ -8,15 +8,24 @@
     <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css" />
     {% load static %}
     <link rel="stylesheet" href="{% static 'custom.css' %}" />
+    <link rel="stylesheet" href="{% static 'fontawesome/css/fontawesome.css' %}"/>
+    <link rel="stylesheet" href="{% static 'fontawesome/css/brands.css' %}"/>
 </head>
-<header>
-  <h1>Akatama's Slice of the Internet</h1>
-  <nav>
-    {% block nav %}{% endblock nav %}
-  <nav>
-  </header>
 <body>
-{% block page_title %}{% endblock page_title %}
-{% block page_content %}{% endblock page_content %}
+  <header>
+    <h1>Akatama's Slice of the Internet</h1>
+    <nav>
+      {% block nav %}{% endblock nav %}
+    <nav>
+  </header>
+  <main>
+    {% block page_title %}{% endblock page_title %}
+    {% block page_content %}{% endblock page_content %}
+  </main>
+  <footer>
+      <a href="https://github.com/Akatama" target="_blank"><i class="fa-brands fa-github" style="font-size: 3rem;"></i></a>
+      <a href="https://www.linkedin.com/in/james-n-lindsey/" target="_blank"><i class="fa-brands fa-linkedin" style="font-size: 3rem;"></i></a>
+      <a href="https://discordapp.com/users/195387736469798913" target="_blank"><i class="fa-brands fa-discord" style="font-size: 3rem;"></i></a>
+  </footer>
 </body>
 </html>

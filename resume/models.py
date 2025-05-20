@@ -7,6 +7,9 @@ from markdownx.utils import markdownify
 class Resume(models.Model):
     body = MarkdownxField()
 
+    class Meta:
+        verbose_name_plural = "Resume"
+
     def save(self, *args, **kwargs):
         """
         Create only one About Me instance

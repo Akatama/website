@@ -22,6 +22,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("blog.urls")),
     path("markdownx/", include("markdownx.urls")),
-    path("about/", include("about_me.urls")),
+    path("about", include("about_me.urls")),
     path("resume", include("resume.urls")),
 ]

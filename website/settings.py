@@ -18,7 +18,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 STATIC_ROOT = BASE_DIR / "static"
 STATIC_URL = "/static"
 STATICFILES_DIRS = [
-    BASE_DIR / "css",
+    BASE_DIR / "assets",
 ]
 
 # Quick-start development settings - unsuitable for production
