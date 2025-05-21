@@ -10,3 +10,9 @@ dependencies = [
   "django-markdownx>=4.0.9",
   "sqlparse>=0.5.3",
 ]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.5",
+    "pytest-django>=4.11.1",
+]
