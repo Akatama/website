@@ -16,7 +16,7 @@ class Resume(models.Model):
         """
         if not self.pk and Resume.objects.exists():
             raise ValidationError(
-                "There can only be one About Me, you cannot add another"
+                "There can only be one Resume, you cannot add another"
             )
             return None
         return super(Resume, self).save(*args, **kwargs)
