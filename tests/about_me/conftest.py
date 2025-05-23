@@ -6,7 +6,7 @@ from about_me.models import AboutMe
 
 @pytest.fixture
 def about_me_response(client):
-    AboutMe.objects.create(title="About Akatama", body="test")
+    AboutMe.objects.create(title="About Akatama", body="#test")
     url = reverse("about_index")
     return client.get(url)
 

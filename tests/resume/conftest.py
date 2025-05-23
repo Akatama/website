@@ -6,7 +6,7 @@ from resume.models import Resume
 
 @pytest.fixture
 def resume_response(client):
-    Resume.objects.create(body="test")
+    Resume.objects.create(body="#test")
     url = reverse("resume_index")
     return client.get(url)
 
