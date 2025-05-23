@@ -15,10 +15,13 @@
 
 {% block page_content %}
     <small>
-      {{ post.created_on.date }} | 
-      {% if post.created_on.date != post.last_modified.date or post.created_on.time != post.last_modified.time %}
-      Last Updated: {{ post.last_modified }} | 
-      {% endif %}
+      {% load tz %}
+      {% localtime on %}
+        {{ post.created_on.date|date }} | 
+        {% if post.created_on|date != post.last_modified|date %}
+          Last Updated: {{ post.last_modified.date|date }} {{ post.last_modified.time }} | 
+        {% endif %}
+      {% endlocaltime %}
       Categories:
         {% for category in post.categories.all %}
             <a href="{% url 'blog_category' category.name %}">

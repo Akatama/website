@@ -21,7 +21,7 @@ def blog_category(request, category):
         "-created_on"
     )
 
-    paginator = Paginator(posts, 1)  # show 10 blog posts per page
+    paginator = Paginator(posts, 10)  # show 10 blog posts per page
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
