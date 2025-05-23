@@ -19,7 +19,7 @@
       {% localtime on %}
         {{ post.created_on.date|date }} | 
         {% if post.created_on|date != post.last_modified|date %}
-          Last Updated: {{ post.last_modified.date|date }} {{ post.last_modified.time }} | 
+          Last Updated: {{ post.last_modified.date|date }} | 
         {% endif %}
       {% endlocaltime %}
       Categories:
