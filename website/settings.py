@@ -20,7 +20,6 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
@@ -28,8 +27,6 @@ SECRET_KEY = os.environ.get(
     "SECRET_KEY",
     default="django-insecure-zwmgp!4y-@s#r0+v-3^d_e%)-h3&&w+6^a0e3mm!ajgln7r0&f",
 )
-# SECRET_KEY = "django-insecure-zwmgp!4y-@s#r0+v-3^d_e%)-h3&&w+6^a0e3mm!ajgln7r0&f"
-
 DEBUG = bool(os.environ.get("DEBUG", default=1))
 
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost").split(",")
@@ -90,9 +87,17 @@ WSGI_APPLICATION = "website.wsgi.application"
 
 DATABASES = {
     "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("RDS_DB_NAME"),
+        "USER": os.getenv("RDS_USERNAME"),
+        "PASSWORD": os.getenv("RDS_PASSWORD"),
+        "HOST": os.getenv("RDS_HOSTNAME"),
+        "PORT": os.getenv("RDS_PORT"),
+    },
+    "local": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
-    }
+    },
 }
 
 
@@ -143,7 +148,7 @@ AWS_S3_SIGNATURE_VERSION = "s3v4"
 AWES_QUERYSTARING_AUTH = False
 
 STATIC_ROOT = BASE_DIR / "static"
-STATIC_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/"
+STATIC_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/static/"
 STATICFILES_DIRS = [
     BASE_DIR / "assets",
 ]
