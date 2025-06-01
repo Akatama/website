@@ -1,49 +1,36 @@
-module "vpc" {
-  source  = "aws-ia/vpc/aws"
-  version = ">= 4.2.0"
+resource "aws_vpc" "blog" {
+  cidr_block           = var.vpc_cidr_block
+  tags                 = local.common_tags
+  enable_dns_hostnames = true
+}
 
-  name                                 = "${var.naming_prefix}-vpc"
-  cidr_block                           = var.vpc_cidr_block
-  vpc_assign_generated_ipv6_cidr_block = false
-  vpc_egress_only_internet_gateway     = false
-  az_count                             = 2
-  tags                                 = locals.common_tags
+resource "aws_subnet" "blog" {
+  vpc_id                  = aws_vpc.blog.id
+  tags                    = local.common_tags
+  map_public_ip_on_launch = true
+  cidr_block              = var.blog_cidr_block
+}
 
-  subnets = {
-    private_db = {
-      name_prefix               = "db"
-      netmask                   = 24
-      assign_ipv6_cidr          = false
-      nat_gateway_configuration = "none"
-    }
-    private_db2 = {
-      name_prefix               = "db2"
-      netmask                   = 24
-      assign_ipv6_cidr          = false
-      nat_gateway_configuration = "none"
-    }
-    public = {
-      name_prefix               = "blog"
-      netmask                   = 24
-      assign_ipv6_cidr          = false
-      nat_gateway_configuration = "none"
-      map_public_ip_on_launch   = var.map_public_ip_on_launch
-    }
-    public2 = {
-      name_prefix               = "blog2"
-      netmask                   = 24
-      assign_ipv6_cidr          = false
-      nat_gateway_configuration = "none"
-      map_public_ip_on_launch   = var.map_public_ip_on_launch
-    }
-  }
+resource "aws_subnet" "db1" {
+  vpc_id                  = aws_vpc.blog.id
+  tags                    = local.common_tags
+  map_public_ip_on_launch = true
+  cidr_block              = var.db1_cidr_block
+}
+
+resource "aws_subnet" "db2" {
+  vpc_id                  = aws_vpc.blog.id
+  tags                    = local.common_tags
+  map_public_ip_on_launch = true
+  cidr_block              = var.db2_cidr_block
+  availability_zone       = "us-west-1b"
 }
 
 resource "aws_security_group" "blog_security" {
   name        = "${var.naming_prefix}_security"
   description = "Security group for my blog"
-  vpc_id      = aws_vpc.main.id
-  tags        = locals.common_tags
+  vpc_id      = aws_vpc.blog.id
+  tags        = local.common_tags
 }
 
 resource "aws_vpc_security_group_ingress_rule" "allow_tls" {
@@ -51,6 +38,7 @@ resource "aws_vpc_security_group_ingress_rule" "allow_tls" {
   ip_protocol       = "tcp"
   from_port         = 443
   to_port           = 443
+  cidr_ipv4         = "0.0.0.0/0"
 }
 
 resource "aws_vpc_security_group_ingress_rule" "allow_http" {
@@ -58,18 +46,25 @@ resource "aws_vpc_security_group_ingress_rule" "allow_http" {
   ip_protocol       = "tcp"
   from_port         = 80
   to_port           = 80
+  cidr_ipv4         = "0.0.0.0/0"
 }
 
-resource "aws_security_group" "db_secuity" {
+resource "aws_security_group" "db_security" {
   name        = "${var.naming_prefix}_db_security"
   description = "Security group for database"
-  vpc_id      = model.vpc.vpc_id
-  tags        = locals.common_tags
+  vpc_id      = aws_vpc.blog.id
+  tags        = local.common_tags
 }
 
 resource "aws_vpc_security_group_ingress_rule" "allow_db_connection" {
-  security_group_id = aws_security_group.db_secuity.id
+  security_group_id = aws_security_group.db_security.id
   from_port         = var.db_port
   to_port           = var.db_port
   ip_protocol       = "tcp"
+  cidr_ipv4         = var.vpc_cidr_block
+}
+
+resource "aws_internet_gateway" "gateway" {
+  vpc_id = aws_vpc.blog.id
+  tags   = local.common_tags
 }

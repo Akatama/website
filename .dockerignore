@@ -12,9 +12,4 @@ db.sqlite3
 .env
 .env.old
 
-/opentofu/blog.tfvars
-/opentofu/*.plan
-/opentofu/.terraform*
-/opentofu/terraform.*
-
-helpful_links
+opentofu/

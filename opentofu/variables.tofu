@@ -10,6 +10,21 @@ variable "vpc_cidr_block" {
   default     = "10.0.0.0/16"
 }
 
+variable "blog_cidr_block" {
+  type    = string
+  default = "10.0.1.0/24"
+}
+
+variable "db1_cidr_block" {
+  type    = string
+  default = "10.0.3.0/24"
+}
+
+variable "db2_cidr_block" {
+  type    = string
+  default = "10.0.4.0/24"
+}
+
 variable "map_public_ip_on_launch" {
   type        = bool
   description = "Map a public IP address for Subnet instances"
@@ -29,6 +44,7 @@ variable "db_username" {
 variable "db_password" {
   type        = string
   description = "Password for the database"
+  sensitive   = true
 }
 
 variable "db_instance_class" {
