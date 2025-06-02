@@ -63,3 +63,9 @@ variable "db_storage" {
   description = "Size in gigabytes for the database"
   default     = 20
 }
+
+variable "ecr_name" {
+  type        = string
+  description = "Name of the ECR instance"
+  default     = "blog_ecr"
+}
