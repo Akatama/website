@@ -13,3 +13,7 @@ db.sqlite3
 .env.old
 
 opentofu/
+static/
+assets/
+
+helpful_links
