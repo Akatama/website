@@ -69,3 +69,21 @@ variable "ecr_name" {
   description = "Name of the ECR instance"
   default     = "blog_ecr"
 }
+
+variable "ebs_bucket_name" {
+  type        = string
+  description = "The name of the s3 bucket used for EBS"
+  default     = "ebs-blog-bucket"
+}
+
+variable "ebs_name" {
+  type        = string
+  description = "The name of the Elastic Beanstalk App"
+  default     = "ebs_blog"
+}
+
+variable "blog_instance_class" {
+  type        = string
+  description = "Instance class for my blog"
+  default     = "t3.micro"
+}

@@ -16,5 +16,6 @@ db.sqlite3
 /opentofu/*.plan
 /opentofu/.terraform*
 /opentofu/terraform.*
+/opentofu/Dockerrun.aws.json
 
 helpful_links

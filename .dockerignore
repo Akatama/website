@@ -9,7 +9,6 @@ db.sqlite3
 
 # Virtual environments
 .venv
-.env
 .env.old
 
 opentofu/
