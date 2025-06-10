@@ -1,0 +1,29 @@
+services:
+  blog:
+    volumes:
+      - django_logs:/logs
+    build:
+      context: .
+    expose:
+      - 8000
+    ports:
+      - "xxxx:xxxx"
+    restart: always
+    env_file:
+      - .env
+
+  nginx:
+    build: ./nginx
+    volumes:
+      - ./static:/var/www/blog/static
+      - nginx_logs:/var/log/nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - blog
+    restart: always
+
+volumes:
+  static:
+  django_logs:
+  nginx_logs:
