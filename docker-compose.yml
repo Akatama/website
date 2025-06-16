@@ -7,15 +7,23 @@ services:
     expose:
       - 8000
     ports:
-      - "xxxx:xxxx"
+      - "${RDS_PORT}:${RDS_PORT}"
     restart: always
+    environment:
+      SECRET_KEY: ${SECRET_KEY}
+      DJANGO_LOGLEVEL: ${DJANGO_LOGLEVEL}
+      DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS}
+      RDS_DB_NAME: ${RDS_DB_NAME}
+      RDS_USERNAME: ${RDS_USERNAME}
+      RDS_PASSWORD: ${RDS_PASSWORD}
+      RDS_HOSTNAME: ${RDS_HOSTNAME}
+      RDS_PORT: ${RDS_PORT}
     env_file:
       - .env
 
   nginx:
     build: ./nginx
     volumes:
-      - ./static:/var/www/blog/static
       - nginx_logs:/var/log/nginx
     ports:
       - "80:80"
@@ -24,6 +32,5 @@ services:
     restart: always
 
 volumes:
-  static:
   django_logs:
   nginx_logs:
