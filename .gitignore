@@ -11,3 +11,11 @@ db.sqlite3
 .venv
 .env
 .env.old
+
+/opentofu/blog.tfvars
+/opentofu/*.plan
+/opentofu/.terraform*
+/opentofu/terraform.*
+/opentofu/Dockerrun.aws.json
+
+helpful_links
