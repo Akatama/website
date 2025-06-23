@@ -11,6 +11,12 @@ resource "aws_elastic_beanstalk_application_version" "app_version" {
   tags        = local.common_tags
 }
 
+data "aws_acm_certificate" "domain" {
+  domain      = var.domain_name
+  types       = ["AMAZON_ISSUED"]
+  most_recent = true
+}
+
 resource "aws_elastic_beanstalk_environment" "env" {
   name                   = "ebs-blog-env"
   application            = aws_elastic_beanstalk_application.app.name
@@ -29,8 +35,20 @@ resource "aws_elastic_beanstalk_environment" "env" {
   setting {
     name      = "EnvironmentType"
     namespace = "aws:elasticbeanstalk:environment"
-    value     = "SingleInstance"
+    value     = "LoadBalanced"
   }
+
+  setting {
+    name      = "MaxSize"
+    namespace = "aws:autoscaling:asg"
+    value     = 1
+  }
+
+  # setting {
+  #   name      = "Custom Availability Zones"
+  #   namespace = "aws:autoscaling:asg"
+  #   value     = "us-west-1a"
+  # }
 
   setting {
     name      = "SecurityGroups"
@@ -56,18 +74,31 @@ resource "aws_elastic_beanstalk_environment" "env" {
     value     = join("", [aws_subnet.blog.id])
   }
 
-  # setting {
-  #   name      = "SSLCertificateId"
-  #   namespace = "aws:elb:loadbalancer"
-  #   value     = aws_acm_certificate.cert.certificate_id
-  # }
-  #
-  # dynamic "setting" {
-  #   for_each = local.app_env
-  #   content {
-  #     namespace = "aws:elasticbeanstalk:application:environment"
-  #     name      = setting.key
-  #     value     = setting.value
-  #   }
-  # }
+  setting {
+    name      = "ListenerProtocol"
+    namespace = "aws:elb:listener:443"
+    value     = "HTTPS"
+  }
+
+  setting {
+    name      = "InstancePort"
+    namespace = "aws:elb:listener:443"
+    value     = "80"
+  }
+
+  setting {
+    name      = "SSLCertificateId"
+    namespace = "aws:elb:listener:443"
+    value     = data.aws_acm_certificate.domain.arn
+  }
+
+
+  dynamic "setting" {
+    for_each = local.env
+    content {
+      namespace = "aws:elasticbeanstalk:application:environment"
+      name      = setting.key
+      value     = setting.value
+    }
+  }
 }

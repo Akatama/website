@@ -87,3 +87,9 @@ variable "blog_instance_class" {
   description = "Instance class for my blog"
   default     = "t3.micro"
 }
+
+variable "domain_name" {
+  type        = string
+  description = "The domain name associated with the certificate"
+  default     = "www.akatama.dev"
+}

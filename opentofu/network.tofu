@@ -9,6 +9,7 @@ resource "aws_subnet" "blog" {
   tags                    = local.common_tags
   map_public_ip_on_launch = true
   cidr_block              = var.blog_cidr_block
+  availability_zone       = "us-west-1a"
 }
 
 resource "aws_subnet" "db1" {
@@ -49,12 +50,20 @@ resource "aws_vpc_security_group_ingress_rule" "allow_http" {
   cidr_ipv4         = "0.0.0.0/0"
 }
 
+# resource "aws_vpc_security_group_ingress_rule" "db_access" {
+#   security_group_id            = aws_security_group.blog_security.id
+#   ip_protocol                  = "tcp"
+#   from_port                    = var.db_port
+#   to_port                      = var.db_port
+#   referenced_security_group_id = aws_security_group.db_security.id
+# }
+
 resource "aws_vpc_security_group_egress_rule" "db_access" {
-  security_group_id = aws_security_group.blog_security.id
-  ip_protocol       = "tcp"
-  from_port         = var.db_port
-  to_port           = var.db_port
-  cidr_ipv4         = var.vpc_cidr_block
+  security_group_id            = aws_security_group.blog_security.id
+  ip_protocol                  = "tcp"
+  from_port                    = var.db_port
+  to_port                      = var.db_port
+  referenced_security_group_id = aws_security_group.db_security.id
 }
 
 resource "aws_security_group" "db_security" {
@@ -65,18 +74,11 @@ resource "aws_security_group" "db_security" {
 }
 
 resource "aws_vpc_security_group_ingress_rule" "allow_db_connection" {
-  security_group_id = aws_security_group.db_security.id
-  from_port         = var.db_port
-  to_port           = var.db_port
-  ip_protocol       = "tcp"
-  cidr_ipv4         = var.vpc_cidr_block
-}
-resource "aws_vpc_security_group_egress_rule" "connect_to_app" {
-  security_group_id = aws_security_group.db_security.id
-  from_port         = var.db_port
-  to_port           = var.db_port
-  ip_protocol       = "tcp"
-  cidr_ipv4         = var.vpc_cidr_block
+  security_group_id            = aws_security_group.db_security.id
+  from_port                    = var.db_port
+  to_port                      = var.db_port
+  ip_protocol                  = "tcp"
+  referenced_security_group_id = aws_security_group.blog_security.id
 }
 
 resource "aws_internet_gateway" "gateway" {
