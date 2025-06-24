@@ -92,6 +92,12 @@ resource "aws_elastic_beanstalk_environment" "env" {
     value     = data.aws_acm_certificate.domain.arn
   }
 
+  setting {
+    name      = "ListenerEnabled"
+    namespace = "aws:elb:listener"
+    value     = false
+  }
+
 
   dynamic "setting" {
     for_each = local.env
