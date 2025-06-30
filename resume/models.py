@@ -12,7 +12,7 @@ class Resume(models.Model):
 
     def save(self, *args, **kwargs):
         """
-        Create only one About Me instance
+        Create only one Resume instance
         """
         if not self.pk and Resume.objects.exists():
             raise ValidationError(
