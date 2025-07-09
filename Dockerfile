@@ -43,8 +43,6 @@ WORKDIR /app
 ENV VIRTUAL_ENV=/app/.venv \
   PATH="/app/.venv/bin:$PATH"
 
-# COPY --from=build /usr/local/lib/python3.13/site-packages/ /usr/local/lib/python3.13/site-packages/
-# COPY --from=build /usr/local/bin/ /usr/local/bin/
 COPY --from=build --chown=nonroot:nonroot /app ./
 
 EXPOSE 8000

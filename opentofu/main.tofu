@@ -44,12 +44,6 @@ resource "aws_elastic_beanstalk_environment" "env" {
     value     = 1
   }
 
-  # setting {
-  #   name      = "Custom Availability Zones"
-  #   namespace = "aws:autoscaling:asg"
-  #   value     = "us-west-1a"
-  # }
-
   setting {
     name      = "SecurityGroups"
     namespace = "aws:autoscaling:launchconfiguration"
