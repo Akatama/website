@@ -36,16 +36,16 @@ wheels = [
 
 [[package]]
 name = "django-markdownx"
-version = "4.0.9"
+version = "4.0.7"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "django" },
     { name = "markdown" },
     { name = "pillow" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/4a/80/e4ff7b93b7518efe7fbe9b18ac5735b53fae943063df6fbef53bc454e045/django-markdownx-4.0.9.tar.gz", hash = "sha256:f82949beaddcaf5cbe765f580b1bf062b3aa5eea94633fdbbb6466514311a907", size = 32649, upload-time = "2025-04-23T12:13:32.864Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/61/b9/e33e16c721ca429c42cdf52f5f52f78023a576eb4f01294385446a3adaee/django-markdownx-4.0.7.tar.gz", hash = "sha256:38aa331c2ca0bee218b77f462361b5393e4727962bc6021939c09048363cb6ea", size = 35697, upload-time = "2023-12-08T19:16:54.664Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/1a/76/53574402650befe1ee7b7bb2ddf49b2862a2a080c8042ff3c853922363bb/django_markdownx-4.0.9-py2.py3-none-any.whl", hash = "sha256:0e78759a8701073fee3e4883764a9bf1cdf3fe4c2941747acbe4f093f9285805", size = 42411, upload-time = "2025-04-23T12:13:31.554Z" },
+    { url = "https://files.pythonhosted.org/packages/14/0e/1413c3228ef262df351094621e0e1c550a68a7960c23719198b41a6097bc/django_markdownx-4.0.7-py2.py3-none-any.whl", hash = "sha256:c1975ae3053481d4c111abd38997a5b5bb89235a1e3215f995d835942925fe7b", size = 44136, upload-time = "2023-12-08T19:16:52.219Z" },
 ]
 
 [[package]]
@@ -62,7 +62,7 @@ wheels = [
 
 [[package]]
 name = "django-website"
-version = "0.9.9"
+version = "1.0.0"
 source = { virtual = "." }
 dependencies = [
     { name = "asgiref" },
@@ -70,9 +70,10 @@ dependencies = [
     { name = "django-markdownx" },
     { name = "django-storages" },
     { name = "gunicorn" },
+    { name = "markdown" },
     { name = "psycopg" },
     { name = "psycopg-binary" },
-    { name = "python-dotenv" },
+    { name = "pygments" },
     { name = "sqlparse" },
     { name = "whitenoise" },
 ]
@@ -87,12 +88,13 @@ dev = [
 requires-dist = [
     { name = "asgiref", specifier = ">=3.8.1" },
     { name = "django", specifier = ">=5.2.1" },
-    { name = "django-markdownx", specifier = ">=4.0.9" },
+    { name = "django-markdownx", specifier = "==4.0.7" },
     { name = "django-storages", specifier = ">=1.14.6" },
     { name = "gunicorn", specifier = ">=23.0.0" },
+    { name = "markdown", specifier = "==3.7" },
     { name = "psycopg", specifier = ">=3.2.9" },
     { name = "psycopg-binary", specifier = ">=3.2.9" },
-    { name = "python-dotenv", specifier = ">=1.1.0" },
+    { name = "pygments", specifier = ">=2.19.2" },
     { name = "sqlparse", specifier = ">=0.5.3" },
     { name = "whitenoise", specifier = ">=6.9.0" },
 ]
@@ -126,11 +128,11 @@ wheels = [
 
 [[package]]
 name = "markdown"
-version = "3.8"
+version = "3.7"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/2f/15/222b423b0b88689c266d9eac4e61396fe2cc53464459d6a37618ac863b24/markdown-3.8.tar.gz", hash = "sha256:7df81e63f0df5c4b24b7d156eb81e4690595239b7d70937d0409f1b0de319c6f", size = 360906, upload-time = "2025-04-11T14:42:50.928Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/54/28/3af612670f82f4c056911fbbbb42760255801b3068c48de792d354ff4472/markdown-3.7.tar.gz", hash = "sha256:2ae2471477cfd02dbbf038d5d9bc226d40def84b4fe2986e49b59b6b472bbed2", size = 357086, upload-time = "2024-08-16T15:55:17.812Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/51/3f/afe76f8e2246ffbc867440cbcf90525264df0e658f8a5ca1f872b3f6192a/markdown-3.8-py3-none-any.whl", hash = "sha256:794a929b79c5af141ef5ab0f2f642d0f7b1872981250230e72682346f7cc90dc", size = 106210, upload-time = "2025-04-11T14:42:49.178Z" },
+    { url = "https://files.pythonhosted.org/packages/3f/08/83871f3c50fc983b88547c196d11cf8c3340e37c32d2e9d6152abe2c61f7/Markdown-3.7-py3-none-any.whl", hash = "sha256:7eb6df5690b81a1d7942992c97fad2938e956e79df20cbc6186e9c3a77b1c803", size = 106349, upload-time = "2024-08-16T15:55:16.176Z" },
 ]
 
 [[package]]
@@ -212,6 +214,15 @@ wheels = [
 ]
 
 [[package]]
+name = "pygments"
+version = "2.19.2"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/b0/77/a5b8c569bf593b0140bde72ea885a803b82086995367bf2037de0159d924/pygments-2.19.2.tar.gz", hash = "sha256:636cb2477cec7f8952536970bc533bc43743542f70392ae026374600add5b887", size = 4968631, upload-time = "2025-06-21T13:39:12.283Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c7/21/705964c7812476f378728bdf590ca4b771ec72385c533964653c68e86bdc/pygments-2.19.2-py3-none-any.whl", hash = "sha256:86540386c03d588bb81d44bc3928634ff26449851e99741617ecb9037ee5ec0b", size = 1225217, upload-time = "2025-06-21T13:39:07.939Z" },
+]
+
+[[package]]
 name = "pytest"
 version = "8.3.5"
 source = { registry = "https://pypi.org/simple" }
@@ -236,15 +247,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/b1/fb/55d580352db26eb3d59ad50c64321ddfe228d3d8ac107db05387a2fadf3a/pytest_django-4.11.1.tar.gz", hash = "sha256:a949141a1ee103cb0e7a20f1451d355f83f5e4a5d07bdd4dcfdd1fd0ff227991", size = 86202, upload-time = "2025-04-03T18:56:09.338Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/be/ac/bd0608d229ec808e51a21044f3f2f27b9a37e7a0ebaca7247882e67876af/pytest_django-4.11.1-py3-none-any.whl", hash = "sha256:1b63773f648aa3d8541000c26929c1ea63934be1cfa674c76436966d73fe6a10", size = 25281, upload-time = "2025-04-03T18:56:07.678Z" },
-]
-
-[[package]]
-name = "python-dotenv"
-version = "1.1.0"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/88/2c/7bb1416c5620485aa793f2de31d3df393d3686aa8a8506d11e10e13c5baf/python_dotenv-1.1.0.tar.gz", hash = "sha256:41f90bc6f5f177fb41f53e87666db362025010eb28f60a01c9143bfa33a2b2d5", size = 39920, upload-time = "2025-03-25T10:14:56.835Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/1e/18/98a99ad95133c6a6e2005fe89faedf294a748bd5dc803008059409ac9b1e/python_dotenv-1.1.0-py3-none-any.whl", hash = "sha256:d7c01d9e2293916c18baf562d95698754b0dbbb5e74d457c45d4f6561fb9d55d", size = 20256, upload-time = "2025-03-25T10:14:55.034Z" },
 ]
 
 [[package]]

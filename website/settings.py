@@ -100,6 +100,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+MARKDOWNX_MARKDOWN_EXTENSIONS = [
+    "markdown.extensions.extra",
+    "markdown.extensions.codehilite",
+    "markdown.extensions.nl2br",
+]
+
 LANGUAGE_CODE = "en-us"
 
 
