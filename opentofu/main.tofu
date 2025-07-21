@@ -92,12 +92,6 @@ resource "aws_elastic_beanstalk_environment" "env" {
     value     = false
   }
 
-  setting {
-    name      = "DeploymentPolicy"
-    namespace = "aws:elasticbeanstalk:command"
-    value     = "Immutable"
-  }
-
 
   dynamic "setting" {
     for_each = local.env

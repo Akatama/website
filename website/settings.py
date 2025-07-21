@@ -104,6 +104,7 @@ MARKDOWNX_MARKDOWN_EXTENSIONS = [
     "markdown.extensions.extra",
     "markdown.extensions.codehilite",
     "markdown.extensions.nl2br",
+    "markdown.extensions.toc",
 ]
 
 LANGUAGE_CODE = "en-us"
