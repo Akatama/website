@@ -7,6 +7,6 @@ import pytest
 def test_resume_view(resume_response):
     assert resume_response.status_code == 200
 
-    assertContains(resume_response, "<h1>test</h1>")
+    assertContains(resume_response, '<h1 id="test">test</h1>')
     assertNotContains(resume_response, "fake")
     assertTemplateUsed(resume_response, "resume/resume.html")

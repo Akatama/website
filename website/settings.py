@@ -70,15 +70,15 @@ WSGI_APPLICATION = "website.wsgi.application"
 
 
 DATABASES = {
+    # "default": {
+    #     "ENGINE": "django.db.backends.postgresql",
+    #     "NAME": os.getenv("RDS_DB_NAME"),
+    #     "USER": os.getenv("RDS_USERNAME"),
+    #     "PASSWORD": os.getenv("RDS_PASSWORD"),
+    #     "HOST": os.getenv("RDS_HOSTNAME"),
+    #     "PORT": os.getenv("RDS_PORT"),
+    # },
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("RDS_DB_NAME"),
-        "USER": os.getenv("RDS_USERNAME"),
-        "PASSWORD": os.getenv("RDS_PASSWORD"),
-        "HOST": os.getenv("RDS_HOSTNAME"),
-        "PORT": os.getenv("RDS_PORT"),
-    },
-    "local": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
     },

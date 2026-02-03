@@ -10,7 +10,7 @@ def test_post_content(Post_object):
 
 
 def test_post_formatted_markdown(Post_object):
-    assert Post_object.formatted_markdown == "<h1>test1</h1>"
+    assert Post_object.formatted_markdown == '<h1 id="test1">test1</h1>'
 
 
 def test_post_save(Post_object):
