@@ -10,11 +10,12 @@
 {% endblock nav %}
 
 {% block page_title %}
-<h4>{{ about_me.title }}<h4>
+<h2 style="text-align:center">{{ about_me.title }}<h2>
+<p></p>
 {% endblock page_title %}
 
 {% block page_content %}
     {% load static %}
-    <img src="{% static 'pics/jimmy_ella.jpeg' %}" alt="Me with my youngest daughter Ella"></img>
-    <p><small style="font-weight:normal;">{{ about_me.formatted_markdown | safe}}</small></p>
+    <img src="{% static 'pics/jimmy_ella.jpeg' %}" alt="Me with my youngest daughter Ella" class="center"></img>
+    <p><small style="font-weight:normal;font-size:1.44rem;">{{ about_me.formatted_markdown | safe}}</small></p>
 {% endblock page_content %}
