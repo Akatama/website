@@ -1,4 +1,4 @@
-name: Test
+name: Deploy
 on:
   push
 permissions:
@@ -30,5 +30,9 @@ jobs:
           docker build -t $REPOSITORY .
           docker tag $REPOSITORY:latest $REGISTRY/$REPOSITORY:$IMAGE_TAG
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+          if [ "$IMAGE_TAG" == "main" ]; then
+            docker tag $REPOSITORY:latest $REGISTRY/$REPOSITORY
+            docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+          fi
 
       
