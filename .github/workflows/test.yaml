@@ -6,7 +6,7 @@ jobs:
   run-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v5
       - name: Set up Python 3.14
         # note: uses .python-version
         uses: actions/setup-python@v4
@@ -16,6 +16,6 @@ jobs:
         run: uv sync
       - name: Run tests
         env:
-          SECRET_KEY: $${ secrets.SECRET_KEY
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
         run: uv run pytest
         
