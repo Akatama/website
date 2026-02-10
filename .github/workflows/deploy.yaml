@@ -25,9 +25,10 @@ jobs:
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           REPOSITORY: blog_ecr
-          IMAGE_TAG: dev
+          IMAGE_TAG: ${{ github.head_ref || github.ref_name }}
         run: |
-          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
-          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG 
+          docker build -t $REPOSITORY .
+          docker tag $REPOSITORY:latest $REGISTRY/$REPOSITORY:$IMAGE_TAG
+          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
 
       
