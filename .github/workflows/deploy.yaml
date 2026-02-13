@@ -1,13 +1,33 @@
 name: Deploy
 on:
   push
-permissions:
-  id-token: write
-  contents: read
 
 jobs:
-  build-container:
+  run-test:
     runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Set up Python 3.14
+        # note: uses .python-version
+        uses: actions/setup-python@v4
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@v7
+      - name: Install dependencies
+        run: uv sync
+      - name: Run tests
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        run: uv run pytest
+  build-container:
+    needs: run-test
+    runs-on: ubuntu-latest
+
+    permissions:
+      # required for alloiwng the workflow to request and use an OIDC token for an action or step
+      # specifically, we need the below set for aws-actions/configure-aws-credentials@v4
+      id-token: write
+      contents: read # required for actions/checkout
+
     outputs:
       image_tag: ${{ steps.build-publish.outputs.image_tag }}
       full_image: ${{ steps.build-publish.outputs.full_image }}
@@ -25,7 +45,7 @@ jobs:
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           REPOSITORY: blog_ecr
-          IMAGE_TAG: ${{ github.head_ref || github.ref_name }}
+          IMAGE_TAG: ${{ github.sha }}
         run: |
           docker build -t $REPOSITORY .
           docker tag $REPOSITORY:latest $REGISTRY/$REPOSITORY:$IMAGE_TAG
