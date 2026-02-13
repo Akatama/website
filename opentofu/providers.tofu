@@ -19,11 +19,3 @@ terraform {
 provider "aws" {
   region = "us-west-1"
 }
-
-provider "local" {
-
-}
-
-provider "template" {
-
-}

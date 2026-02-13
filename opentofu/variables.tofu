@@ -93,3 +93,34 @@ variable "domain_name" {
   description = "The domain name associated with the certificate"
   default     = "www.akatama.dev"
 }
+
+variable "image_tag" {
+  type        = string
+  description = "The image tag to use for elastic beanstalk service"
+}
+
+# The following variables are for Elastic Beanstalk Configuration
+
+variable "database_engine" {
+  type        = string
+  description = "The name of the database engine"
+  sensitive   = true
+}
+
+variable "django_allowed_hosts" {
+  type        = string
+  description = "The allowed hosts for the website"
+  sensitive   = true
+}
+
+variable "django_loglevel" {
+  type        = string
+  description = "The log level for django"
+  sensitive   = true
+}
+
+variable "secret_key" {
+  type        = string
+  description = "The Django secret key"
+  sensitive   = true
+}
