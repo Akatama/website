@@ -47,7 +47,8 @@ jobs:
           REPOSITORY: blog_ecr
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker build -t $REPOSITORY .
+          # try --provenance=false so I don't see weird 0MB docker images on AWS ECR
+          docker build --provenance=false -t $REPOSITORY .
           docker tag $REPOSITORY:latest $REGISTRY/$REPOSITORY:$IMAGE_TAG
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
       
