@@ -43,15 +43,15 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
       - name: Build docker image, tag and push docker image to Amazon ECR
         env:
-          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: blog_ecr
         run: |
           # try --provenance=false so I don't see weird 0MB docker images on AWS ECR
           # also note that I decided to do Docker build as its own step for future reasons
           docker build --provenance=false -t $REPOSITORY .
       - name: Tag and push docker image to Amazon ECR
         env:
-          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           REPOSITORY: blog_ecr
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
           docker tag $REPOSITORY:latest $REGISTRY/$REPOSITORY:$IMAGE_TAG
