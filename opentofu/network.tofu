@@ -15,14 +15,14 @@ resource "aws_subnet" "blog" {
 resource "aws_subnet" "db1" {
   vpc_id                  = aws_vpc.blog.id
   tags                    = local.common_tags
-  map_public_ip_on_launch = true
+  map_public_ip_on_launch = false
   cidr_block              = var.db1_cidr_block
 }
 
 resource "aws_subnet" "db2" {
   vpc_id                  = aws_vpc.blog.id
   tags                    = local.common_tags
-  map_public_ip_on_launch = true
+  map_public_ip_on_launch = false
   cidr_block              = var.db2_cidr_block
   availability_zone       = "us-west-1b"
 }

@@ -12,6 +12,9 @@ db.sqlite3
 .env.old
 .env
 
+.git
+.github
+
 opentofu/
 assets/
 

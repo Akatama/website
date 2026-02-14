@@ -1,0 +1,113 @@
+name: Test-Build-Plan-Deploy
+on:
+  push
+
+jobs:
+  run-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Set up Python 3.14
+        # note: uses .python-version
+        uses: actions/setup-python@v4
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@v7
+      - name: Install dependencies
+        run: uv sync
+      - name: Run tests
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        run: uv run pytest
+  build-container:
+    needs: run-test
+    runs-on: ubuntu-latest
+
+    permissions:
+      # required for alloiwng the workflow to request and use an OIDC token for an action or step
+      # specifically, we need the below set for aws-actions/configure-aws-credentials@v4
+      id-token: write
+      contents: read # required for actions/checkout
+
+    steps:
+      - uses: actions/checkout@v5
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/WebsiteDeploy
+          aws-region: us-west-1
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+      - name: Build docker image
+        env:
+          REPOSITORY: blog_ecr
+        run: |
+          # try --provenance=false so I don't see weird 0MB docker images on AWS ECR
+          # also note that I decided to do Docker build as its own step for future reasons
+          docker build --provenance=false -t $REPOSITORY .
+      - name: Tag and push docker image to Amazon ECR
+        env:
+          REPOSITORY: blog_ecr
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker tag $REPOSITORY:latest $REGISTRY/$REPOSITORY:$IMAGE_TAG
+          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+  plan-deploy:
+    needs: build-container
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./opentofu
+
+    permissions:
+      # required for alloiwng the workflow to request and use an OIDC token for an action or step
+      # specifically, we need the below set for aws-actions/configure-aws-credentials@v4
+      id-token: write
+      contents: read # required for actions/checkout
+
+    steps:
+      - uses: actions/checkout@v5
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/WebsiteDeploy
+          aws-region: us-west-1
+      - name: Setup OpenTofu
+        uses: opentofu/setup-opentofu@v1
+        with:
+          tofu_wrapper: false
+      - name: OpenTofu fmt
+        run: tofu fmt -check
+      - name: OpenTofu init
+        run: tofu init
+      - name: OpenTofu Validate
+        run: tofu validate -no-color
+      - name: OpenTofu Plan
+        env:
+          DATABASE_ENGINE: ${{ secrets.DATABASE_ENGINE }}
+          DJANGO_ALLOWED_HOSTS: ${{ secrets.DJANGO_ALLOWED_HOSTS }}
+          DJANGO_LOGLEVEL: ${{ secrets.DJANGO_LOGLEVEL }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          IMAGE_TAG: ${{ github.sha }}
+          RDS_DB_NAME: ${{ secrets.RDS_DB_NAME }}
+          RDS_PORT: ${{ secrets.RDS_PORT }}
+          RDS_USERNAME: ${{ secrets.RDS_USERNAME }}
+          RDS_PASSWORD: ${{ secrets.RDS_PASSWORD }}
+        run: |
+          set -eux
+          tofu plan \
+            -var "database_engine=$DATABASE_ENGINE" \
+            -var "django_allowed_hosts=$DJANGO_ALLOWED_HOSTS" \
+            -var "django_loglevel=$DJANGO_LOGLEVEL" \
+            -var "secret_key=$SECRET_KEY" \
+            -var "image_tag=$IMAGE_TAG" \
+            -var "db_name=$RDS_DB_NAME" \
+            -var "db_port=$RDS_PORT" \
+            -var "db_username=$RDS_USERNAME" \
+            -var "db_password=$RDS_PASSWORD" \
+            -out blog.plan
+      - name: OpenTofu Apply
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run: tofu apply "blog.plan"

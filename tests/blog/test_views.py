@@ -206,7 +206,7 @@ def test_blog_detail(blog_detail_response):
     assertNotContains(blog_detail_response, "Last Updated: ")
 
     # body
-    assertContains(blog_detail_response, "<h1>Hi</h1>")
+    assertContains(blog_detail_response, '<h1 id="hi">Hi</h1>')
 
     # category
     assertContains(blog_detail_response, "cat3")

@@ -25,12 +25,6 @@ variable "db2_cidr_block" {
   default = "10.0.4.0/24"
 }
 
-variable "map_public_ip_on_launch" {
-  type        = bool
-  description = "Map a public IP address for Subnet instances"
-  default     = true
-}
-
 variable "db_port" {
   type        = number
   description = "The port to use for the database"
@@ -92,4 +86,35 @@ variable "domain_name" {
   type        = string
   description = "The domain name associated with the certificate"
   default     = "www.akatama.dev"
+}
+
+variable "image_tag" {
+  type        = string
+  description = "The image tag to use for elastic beanstalk service"
+}
+
+# The following variables are for Elastic Beanstalk Configuration
+
+variable "database_engine" {
+  type        = string
+  description = "The name of the database engine"
+  sensitive   = true
+}
+
+variable "django_allowed_hosts" {
+  type        = string
+  description = "The allowed hosts for the website"
+  sensitive   = true
+}
+
+variable "django_loglevel" {
+  type        = string
+  description = "The log level for django"
+  sensitive   = true
+}
+
+variable "secret_key" {
+  type        = string
+  description = "The Django secret key"
+  sensitive   = true
 }

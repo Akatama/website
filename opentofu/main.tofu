@@ -92,13 +92,58 @@ resource "aws_elastic_beanstalk_environment" "env" {
     value     = false
   }
 
-
-  dynamic "setting" {
-    for_each = local.env
-    content {
-      namespace = "aws:elasticbeanstalk:application:environment"
-      name      = setting.key
-      value     = setting.value
-    }
+  setting {
+    name      = "DATABASE_ENGINE"
+    namespace = "aws:elasticbeanstalk:application:environment"
+    value     = var.database_engine
   }
+
+  setting {
+    name      = "DJANGO_ALLOWED_HOSTS"
+    namespace = "aws:elasticbeanstalk:application:environment"
+    value     = var.django_allowed_hosts
+  }
+
+  setting {
+    name      = "DJANGO_LOGLEVEL"
+    namespace = "aws:elasticbeanstalk:application:environment"
+    value     = var.django_loglevel
+  }
+
+  setting {
+    name      = "RDS_DB_NAME"
+    namespace = "aws:elasticbeanstalk:application:environment"
+    value     = var.db_name
+  }
+
+  setting {
+    name      = "RDS_HOSTNAME"
+    namespace = "aws:elasticbeanstalk:application:environment"
+    value     = aws_db_instance.blog_db.address
+  }
+
+  setting {
+    name      = "RDS_PORT"
+    namespace = "aws:elasticbeanstalk:application:environment"
+    value     = var.db_port
+  }
+
+  setting {
+    name      = "RDS_USERNAME"
+    namespace = "aws:elasticbeanstalk:application:environment"
+    value     = var.db_username
+  }
+
+  setting {
+    name      = "RDS_PASSWORD"
+    namespace = "aws:elasticbeanstalk:application:environment"
+    value     = var.db_password
+  }
+
+  setting {
+    name      = "SECRET_KEY"
+    namespace = "aws:elasticbeanstalk:application:environment"
+    value     = var.secret_key
+  }
+
 }

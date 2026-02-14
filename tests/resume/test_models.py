@@ -8,7 +8,7 @@ def test_resume_content(Resume_object):
 
 
 def test_resume_formatted_markdown(Resume_object):
-    assert Resume_object.formatted_markdown == "<h1>test</h1>"
+    assert Resume_object.formatted_markdown == '<h1 id="test">test</h1>'
 
 
 def test_resume_save(Resume_object):
