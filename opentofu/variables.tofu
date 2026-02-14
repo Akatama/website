@@ -118,3 +118,9 @@ variable "secret_key" {
   description = "The Django secret key"
   sensitive   = true
 }
+
+variable "ebs_app_version_number" {
+  type        = number
+  description = "The version number for my Elastic Beanstalk application"
+  default     = 1
+}

@@ -4,7 +4,7 @@ resource "aws_elastic_beanstalk_application" "app" {
 }
 
 resource "aws_elastic_beanstalk_application_version" "app_version" {
-  name        = "${var.ebs_name}-version"
+  name        = "${var.ebs_name}-version-${var.ebs_app_version_number}"
   application = aws_elastic_beanstalk_application.app.name
   bucket      = aws_s3_bucket.ebs.id
   key         = aws_s3_object.ebs_deployment.id
