@@ -25,12 +25,6 @@ variable "db2_cidr_block" {
   default = "10.0.4.0/24"
 }
 
-variable "map_public_ip_on_launch" {
-  type        = bool
-  description = "Map a public IP address for Subnet instances"
-  default     = true
-}
-
 variable "db_port" {
   type        = number
   description = "The port to use for the database"

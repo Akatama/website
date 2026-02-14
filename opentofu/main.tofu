@@ -95,25 +95,25 @@ resource "aws_elastic_beanstalk_environment" "env" {
   setting {
     name      = "DATABASE_ENGINE"
     namespace = "aws:elasticbeanstalk:application:environment"
-    value     = vars.database_engine
+    value     = var.database_engine
   }
 
   setting {
     name      = "DJANGO_ALLOWED_HOSTS"
     namespace = "aws:elasticbeanstalk:application:environment"
-    value     = vars.django_allowed_hosts
+    value     = var.django_allowed_hosts
   }
 
   setting {
     name      = "DJANGO_LOGLEVEL"
     namespace = "aws:elasticbeanstalk:application:environment"
-    value     = vars.django_loglevel
+    value     = var.django_loglevel
   }
 
   setting {
     name      = "RDS_DB_NAME"
     namespace = "aws:elasticbeanstalk:application:environment"
-    value     = vars.db_name
+    value     = var.db_name
   }
 
   setting {
@@ -125,25 +125,25 @@ resource "aws_elastic_beanstalk_environment" "env" {
   setting {
     name      = "RDS_PORT"
     namespace = "aws:elasticbeanstalk:application:environment"
-    value     = vars.db_port
+    value     = var.db_port
   }
 
   setting {
     name      = "RDS_USERNAME"
     namespace = "aws:elasticbeanstalk:application:environment"
-    value     = vars.db_username
+    value     = var.db_username
   }
 
   setting {
     name      = "RDS_PASSWORD"
     namespace = "aws:elasticbeanstalk:application:environment"
-    value     = vars.db_password
+    value     = var.db_password
   }
 
   setting {
     name      = "SECRET_KEY"
     namespace = "aws:elasticbeanstalk:application:environment"
-    value     = vars.secret_key
+    value     = var.secret_key
   }
 
 }

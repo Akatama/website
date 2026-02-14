@@ -8,7 +8,7 @@ resource "aws_s3_object" "ebs_deployment" {
   key    = "Dockerrun.aws.json"
   content = templatefile("${path.module}/Dockerrun.aws.json.tftpl", {
     image_name = aws_ecr_repository.blog.repository_url
-    tag_name   = vars.image_tag
-    db_port    = vars.db_port
+    tag_name   = var.image_tag
+    db_port    = var.db_port
   })
 }
