@@ -53,9 +53,13 @@ jobs:
         run: |
           docker tag $REPOSITORY:latest $REGISTRY/$REPOSITORY:$IMAGE_TAG
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
-  plan:
+  plan-deploy:
     needs: build-container
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./opentofu
 
     permissions:
       # required for alloiwng the workflow to request and use an OIDC token for an action or step
