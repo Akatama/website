@@ -95,12 +95,6 @@ variable "image_tag" {
 
 # The following variables are for Elastic Beanstalk Configuration
 
-variable "database_engine" {
-  type        = string
-  description = "The name of the database engine"
-  sensitive   = true
-}
-
 variable "django_allowed_hosts" {
   type        = string
   description = "The allowed hosts for the website"
@@ -122,5 +116,5 @@ variable "secret_key" {
 variable "ebs_app_version_number" {
   type        = number
   description = "The version number for my Elastic Beanstalk application"
-  default     = 1
+  default     = 2
 }

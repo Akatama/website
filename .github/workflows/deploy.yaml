@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      # required for alloiwng the workflow to request and use an OIDC token for an action or step
+      # required for allowing the workflow to request and use an OIDC token for an action or step
       # specifically, we need the below set for aws-actions/configure-aws-credentials@v4
       id-token: write
       contents: read # required for actions/checkout
@@ -86,7 +86,6 @@ jobs:
         run: tofu validate -no-color
       - name: OpenTofu Plan
         env:
-          DATABASE_ENGINE: ${{ secrets.DATABASE_ENGINE }}
           DJANGO_ALLOWED_HOSTS: ${{ secrets.DJANGO_ALLOWED_HOSTS }}
           DJANGO_LOGLEVEL: ${{ secrets.DJANGO_LOGLEVEL }}
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
@@ -98,7 +97,6 @@ jobs:
         run: |
           set -eux
           tofu plan \
-            -var "database_engine=$DATABASE_ENGINE" \
             -var "django_allowed_hosts=$DJANGO_ALLOWED_HOSTS" \
             -var "django_loglevel=$DJANGO_LOGLEVEL" \
             -var "secret_key=$SECRET_KEY" \
