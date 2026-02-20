@@ -9,3 +9,26 @@ resource "aws_ecr_repository" "blog" {
   }
   tags = local.common_tags
 }
+
+resource "aws_ecr_lifecycle_policy" "example" {
+  repository = aws_ecr_repository.blog.name
+
+  policy = <<EOF
+{
+  "rules": [
+    {
+      "rulePriority": 1,
+      "description": "Keep last 50 images",
+      "selection": {
+        "tagStatus": "tagged",
+        "countType": "imageCountMoreThan",
+        "countNumber": 50
+      },
+      "action": {
+        "type": "expire"
+      }
+    }
+  ]
+}
+EOF
+}

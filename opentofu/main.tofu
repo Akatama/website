@@ -1,9 +1,24 @@
 resource "aws_elastic_beanstalk_application" "app" {
   name = var.ebs_name
   tags = local.common_tags
+
+  appversion_lifecycle {
+    service_role          = aws_iam_role.ebs.arn
+    max_count             = 2
+    delete_source_from_s3 = false
+  }
 }
 
 resource "aws_elastic_beanstalk_application_version" "app_version" {
+  name        = "${var.ebs_name}-version-${var.ebs_app_version_number - 1}"
+  application = aws_elastic_beanstalk_application.app.name
+  bucket      = aws_s3_bucket.ebs.id
+  key         = aws_s3_object.ebs_deployment.id
+  tags        = local.common_tags
+}
+
+# # This is the previous app version
+resource "aws_elastic_beanstalk_application_version" "app_version_2" {
   name        = "${var.ebs_name}-version-${var.ebs_app_version_number}"
   application = aws_elastic_beanstalk_application.app.name
   bucket      = aws_s3_bucket.ebs.id
@@ -20,7 +35,7 @@ data "aws_acm_certificate" "domain" {
 resource "aws_elastic_beanstalk_environment" "env" {
   name                   = "ebs-blog-env"
   application            = aws_elastic_beanstalk_application.app.name
-  version_label          = aws_elastic_beanstalk_application_version.app_version.name
+  version_label          = aws_elastic_beanstalk_application_version.app_version_2.name
   solution_stack_name    = "64bit Amazon Linux 2023 v4.5.2 running Docker"
   tier                   = "WebServer"
   wait_for_ready_timeout = "10m"
@@ -90,12 +105,6 @@ resource "aws_elastic_beanstalk_environment" "env" {
     name      = "ListenerEnabled"
     namespace = "aws:elb:listener"
     value     = false
-  }
-
-  setting {
-    name      = "DATABASE_ENGINE"
-    namespace = "aws:elasticbeanstalk:application:environment"
-    value     = var.database_engine
   }
 
   setting {

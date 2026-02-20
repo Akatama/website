@@ -3,6 +3,18 @@ resource "aws_s3_bucket" "ebs" {
   tags   = local.common_tags
 }
 
+resource "aws_s3_bucket_acl" "ebs_acl" {
+  bucket = aws_s3_bucket.ebs.id
+  acl    = "private"
+}
+
+resource "aws_s3_bucket_versioning" "ebs_versioning" {
+  bucket = aws_s3_bucket.ebs.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
 resource "aws_s3_object" "ebs_deployment" {
   bucket = aws_s3_bucket.ebs.id
   key    = "Dockerrun.aws.json"
