@@ -3,11 +3,6 @@ resource "aws_s3_bucket" "ebs" {
   tags   = local.common_tags
 }
 
-resource "aws_s3_bucket_acl" "ebs_acl" {
-  bucket = aws_s3_bucket.ebs.id
-  acl    = "private"
-}
-
 resource "aws_s3_bucket_versioning" "ebs_versioning" {
   bucket = aws_s3_bucket.ebs.id
   versioning_configuration {
