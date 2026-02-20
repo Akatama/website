@@ -21,6 +21,7 @@ resource "aws_ecr_lifecycle_policy" "example" {
       "description": "Keep last 50 images",
       "selection": {
         "tagStatus": "tagged",
+        "tagPatternList": ["*"],
         "countType": "imageCountMoreThan",
         "countNumber": 50
       },
