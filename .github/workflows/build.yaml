@@ -2,7 +2,7 @@ name: Test-Build-Plan-Deploy
 on: push
 jobs:
   run-test:
-    runs-on: ubuntu-latest
+    runs-on: depot-ubuntu-24.04-8
     steps:
       - uses: actions/checkout@v6
       - name: Install the latest version of uv
@@ -35,7 +35,6 @@ jobs:
         uses: depot/build-push-action@v1
         with:
           context: .
-          project: 1rcmr22lpn
           save: true
           save-tags: |
             latest
