@@ -5,14 +5,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - name: Set up Python 3.14
-        # note: uses .python-version
-        uses: actions/setup-python@v6
-        with:
-          python-version-file: '.python-version'
-          cache: 'pip'
       - name: Install the latest version of uv
         uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+          cache-python: true
+      - name: Set up Python
+        run: uv python install
       - name: Install dependencies
         run: uv sync
       - name: Run tests
@@ -45,8 +44,5 @@ jobs:
       - name: Build and Push with Depot
         uses: depot/build-push-action@v1
         with:
-          # try --provenance=false so I don't see weird 0MB docker images on AWS ECR
-          provenance: false
           context: .
           push: true
-          tags: ${{ steps.login-ecr.outputs.registry }}/blog_ecr:${{ github.sha }}
