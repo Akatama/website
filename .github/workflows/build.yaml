@@ -35,4 +35,7 @@ jobs:
         uses: depot/build-push-action@v1
         with:
           context: .
-          push: true
+          save: true
+          save-tags: |
+            latest
+            ${{ github.sha }}
