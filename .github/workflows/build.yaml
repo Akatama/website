@@ -35,6 +35,7 @@ jobs:
         uses: depot/build-push-action@v1
         with:
           context: .
+          project: 1rcmr22lpn
           save: true
           save-tags: |
             latest
