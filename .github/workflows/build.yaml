@@ -5,6 +5,7 @@ jobs:
     runs-on: depot-ubuntu-24.04-8
     steps:
       - uses: actions/checkout@v6
+      - run: sudo apt-get update
       - name: Install the latest version of uv
         uses: astral-sh/setup-uv@v7
         with:
