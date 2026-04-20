@@ -10,4 +10,6 @@ jobs:
           php-version: '8.4'
           extensions: sqlite3, pdo_sqlite, intl, pcntl
           coverage: pcov
+        env:
+          runner: self-hosted
 
