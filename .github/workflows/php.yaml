@@ -1,0 +1,13 @@
+name: Setup-PHP
+on: push
+jobs:
+  run-test:
+    runs-on: depot-ubuntu-24.04-8
+    steps:
+      - uses: actions/checkout@v6
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: sqlite3, pdo_sqlite, intl, pcntl, pcov
+          coverage: pcov
+
