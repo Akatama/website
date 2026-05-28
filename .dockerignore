@@ -14,8 +14,11 @@ db.sqlite3
 
 .git
 .github
+.depot
+depot.json
 
 opentofu/
 assets/
 
 helpful_links
+dump.dump
