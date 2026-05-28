@@ -40,5 +40,5 @@ jobs:
         uses: depot/build-push-action@v1
         with:
           token: ${{ secrets.DEPOT_TOKEN }}
-          save_tag: akatama/website:${{ github.sha }}
+          save_tag: akatama/website:prep-depot-ci
           save: true

@@ -1,7 +1,5 @@
 FROM python:3.14-slim AS base
 
-RUN mkdir /app
-
 WORKDIR /app
 
 ENV PYTHONUNBUFFERED=1 \
@@ -10,7 +8,7 @@ ENV PYTHONUNBUFFERED=1 \
 FROM base AS build
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-  build-essential \
+  build-essential=12.12 \
   && rm -rf /var/lib/apt/lists/*
 
 COPY --from=ghcr.io/astral-sh/uv:0.7.9 /uv /bin/uv
@@ -33,8 +31,6 @@ FROM base AS runtime
 RUN addgroup --gid 1001 --system nonroot && \
   adduser --no-create-home --shell /bin/false \
   --disabled-password --uid 1001 --system --group nonroot
-
-RUN chown nonroot:nonroot /app
 
 USER nonroot:nonroot
 
