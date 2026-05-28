@@ -4,7 +4,7 @@
 # Changes made:
 # - Changed GitHub runs-on labels to their Depot equivalents
 
-name: Test-Build-Plan-Deploy
+name: Test-Build
 on: push
 jobs:
   run-test:
@@ -40,5 +40,5 @@ jobs:
         uses: depot/build-push-action@v1
         with:
           token: ${{ secrets.DEPOT_TOKEN }}
-          save_tag: ${{USER_NAME}/${{ IMAGE_NAME }}:${{ IMAGE_TAG }}
+          save_tag: akatama/website:${{ github.sha }}
           save: true
