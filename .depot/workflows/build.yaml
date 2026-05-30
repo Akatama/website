@@ -47,6 +47,6 @@ jobs:
         with:
           token: ${{ secrets.DEPOT_TOKEN }}
           push: true
-          save_tags: |
+          tags: |
             ${{ vars.REGISTRY_URL }}/${{ vars.IMAGE_NAME }}:${{ github.sha }}
-            ${{ vars.REGISTRY_URL}}/${{ vars.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+            ${{ vars.REGISTRY_URL }}/${{ vars.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
