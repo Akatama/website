@@ -32,14 +32,21 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: depot/setup-action@v1
+
+      - name: Login to Depot Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ vars.REGISTRY_URL }}
+          username: x-token
+          password: ${{ secrets.DEPOT_TOKEN }}
+
       - name: Build image
-        env:
-          BRANCH_TAG: ${{ github.head_ref == 'main' && 'latest' || github.head_ref }}
         uses: depot/build-push-action@v1
+        env:
+          IMAGE_TAG: ${{ github.ref_name == 'main' && 'latest' || github.ref_name }}
         with:
           token: ${{ secrets.DEPOT_TOKEN }}
-          save: true
+          push: true
           save_tags: |
-            ${{ github.sha }}
-            ${{ BRANCH_TAG }}
-
+            ${{ vars.REGISTRY_URL }}/${{ vars.IMAGE_NAME }}:${{ github.sha }}
+            ${{ vars.REGISTRY_URL}}/${{ vars.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
