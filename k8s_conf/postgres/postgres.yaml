@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgresql
+spec:
+  selector:
+    matchLabels:
+      app: postgresql
+  serviceName: "postgresql"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: postgresql
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:17
+        env:
+          - name: POSTGRES_DB
+            valueFrom:
+              secretKeyRef:
+                name: pg-credentials
+                key: PG_DATABASE
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                name: pg-credentials
+                key: PG_USER
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: pg-credentials
+                key: PG_PASSWORD
+          - name: PG_PORT
+            valueFrom:
+              secretKeyRef:
+                name: pg-credentials
+                key: PG_PORT
+        volumeMounts:
+          - name: pg-data
+            mountPath: /var/lib/postgresql/data
+          - name: config
+            mountPath: /etc/postgresql/postgresql.conf
+            subPath: postgresql.conf
+            readOnly: true
+        args:
+          - "-c"
+          - "config_file=/etc/postgresql/postgresql.conf"
+      volumes:
+        - name: pg-secrets
+          secret:
+            secretName: pg-credentials
+        - name: config
+          configMap:
+            name: postgres-config
+            items:
+              - key: postgresql.conf
+                path: postgresql.conf
+        - name: pg-data
+          persistentVolumeClaim:
+            claimName: pg-data-pvc

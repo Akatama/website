@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: website-blog-ingress
+  namespace: default
+spec:
+  rules:
+    - host: website-dev.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name:  website-blog-nodeport
+                port:
+                  number: 80
