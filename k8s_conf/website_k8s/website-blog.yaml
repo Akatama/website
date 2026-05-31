@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: website-blog
+spec:
+  selector:
+    matchLabels:
+      app: website-blog
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: website-blog
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: website-blog
+          image: t67llm9p7m.registry.depot.dev/akatama/website:prep-depot-ci
+          env:
+            - name: RDS_DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: pg-credentials
+                  key: PG_DATABASE
+            - name: RDS_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: pg-credentials
+                  key: PG_USER
+            - name: RDS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pg-credentials
+                  key: PG_PASSWORD
+            - name: RDS_HOSTNAME
+              value: postgresql
+            - name: RDS_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: pg-credentials
+                  key: PG_PORT
+            - name: DJANGO_ALLOWED_HOSTS
+              valueFrom:
+                configMapKeyRef:
+                  name: django-config
+                  key: DJANGO_ALLOWED_HOSTS
+            - name: DJANGO_LOGLEVEL
+              valueFrom:
+                configMapKeyRef:
+                  name: django-config
+                  key: DJANGO_LOGLEVEL
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: django-secret
+                  key: SECRET_KEY
+          ports:
+            - containerPort: 8000
+
