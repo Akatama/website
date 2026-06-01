@@ -124,4 +124,6 @@ USE_I18N = True
 USE_TZ = True
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
-CSRF_TRUSTED_ORIGINS = ["https://www.akatama.dev", "http://website.local/"]
+CSRF_TRUSTED_ORIGINS = os.environ.get(
+    "DJANGO_CSRF_ORIGINS", "https://www.akatama.dev"
+).split(",")
