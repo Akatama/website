@@ -124,4 +124,4 @@ USE_I18N = True
 USE_TZ = True
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
-CSRF_TRUSTED_ORIGINS = ["https://www.akatama.dev"]
+CSRF_TRUSTED_ORIGINS = ["https://www.akatama.dev", "http://website.local/"]
