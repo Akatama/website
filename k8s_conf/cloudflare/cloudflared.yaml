@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloudflared
+  namespace: cloudflare-tunnel
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cloudflared
+  template:
+    metadata:
+      labels:
+        app: cloudflared
+    spec:
+      containers:
+        - name: cloudflared
+          image: cloudflare/cloudflared:latest
+          imagePullPolicy: Always
+          command: ["/usr/local/bin/cloudflared"]
+          args: 
+            - |
+              tunnel run k3s-homelab --config /etc/cloudflared/config.yml --no-autoupdate
+          volumeMounts:
+            - name: config
+              mountPath: /etc/cloudflared/config.yml
+              subPath: config.yml
+              readOnly: true
+            - name: creds
+              mountPath: /etc/cloudflared/credentials.json
+              subPath: credentials.json
+              readOnly: true
+      volumes:
+        - name: config
+          configMap:
+            name: cloudflared-config
+        - name: creds
+          secret:
+            secretName: tunnel-creds

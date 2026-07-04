@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: pg-restore
+  name: helper-pod
 spec:
   restartPolicy: Never
   containers:
-  - name: pg-client
+  - name: helper-pod
     image: postgres:17
     command: ["/bin/bash","-c","sleep 3600"]
     env:

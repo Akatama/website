@@ -48,9 +48,6 @@ spec:
           - "-c"
           - "config_file=/etc/postgresql/postgresql.conf"
       volumes:
-        - name: pg-secrets
-          secret:
-            secretName: pg-credentials
         - name: config
           configMap:
             name: postgres-config

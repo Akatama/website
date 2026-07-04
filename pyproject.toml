@@ -21,3 +21,13 @@ dependencies = [
 
 [dependency-groups]
 dev = ["pytest>=8.3.5,<9", "pytest-django>=4.11.1,<5"]
+
+[tool.ruff]
+line-length = 120
+lint.select = ["ALL"]
+lint.ignore = [
+  "COM812", # conflicts with formatter
+  "CPY",    # no copyright
+  "D",      # pydocstyle: enable later for public APIs if publishing a library
+  "ISC001", # conflicts with formatter
+]
