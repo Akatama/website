@@ -1,0 +1,9 @@
+[Unit]
+Description=Push Postgres backup every week
+
+[Timer]
+OnCalendar=Wed *-*-* 02:00:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target

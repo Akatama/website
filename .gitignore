@@ -20,3 +20,5 @@ db.sqlite3
 
 helpful_links
 dump.dump
+
+k8s_conf/automatic_deployment_ci/depot_deployer_kubeconfig.yaml
