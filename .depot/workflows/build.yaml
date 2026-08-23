@@ -62,11 +62,11 @@ jobs:
   deploy:
     name: Deploy to K3s
     needs: build-container
-    # if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main'
     runs-on: depot-ubuntu-latest
     
     steps:
-      - name: Setup Blog Kubeconfig
+      - name: Deploy New Container to K3s
         run: |
           KUBECONFIG_FILE="./depot-kubeconfig"
           trap 'rm -f "$KUBECONFIG_FILE"' EXIT
@@ -74,5 +74,19 @@ jobs:
           echo ${{ secrets.BLOG_KUBECONFIG }} | base64 --decode > "$KUBECONFIG_FILE"
           chmod 600 "$KUBECONFIG_FILE"
 
-          kubectl --kubeconfig "$KUBECONFIG_FILE" get deploy website-blog
-          kubectl --kubeconfig "$KUBECONFIG_FILE" rollout status deployment/website-blog
+          # test to make sure we can access the deployment we want to modify
+          kubectl --kubeconfig "$KUBECONFIG_FILE" -n default get deploy website-blog
+
+          kubectl --kubeconfig "$KUBECONFIG_FILE" -n default set image deployment/website-blog \
+            website-blog-depot=${{ vars.REGISTRY_URL }}/${{ vars.IMAGE_NAME }}:${{ github.sha }}
+
+          if kubectl --kubeconfig "$KUBECONFIG_FILE" -n default rollout status deployment/website-blog --timeout=5m
+          then
+            echo "Rollout succeeded"
+          else
+            ROLLOUT_STATUS=$?
+
+            echo "Rollout failed with status $ROLLOUT_STATUS; rolling back"
+            kubectl --kubeconfig "$KUBECONFIG_FILE" -n default rollout undo deployment/website-blog
+            exit "$ROLLOUT_STATUS"
+          fi
