@@ -5,30 +5,40 @@
 # - Changed GitHub runs-on labels to their Depot equivalents
 
 name: Test-Build
+
 on: push
 jobs:
   run-test:
+    name: Run Tests
     runs-on: depot-ubuntu-latest # was: ubuntu-latest. Mapped standard GitHub runner to Depot equivalent.
     steps:
       - uses: actions/checkout@v6
+
       - name: Install the latest version of uv
         uses: astral-sh/setup-uv@v7
+
       - name: Set up Python
         run: uv python install
+
       - name: Install dependencies
         run: uv sync
+
       - name: Run tests
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
         run: uv run pytest
+
   build-container:
+    name: Build Website Blog Container
     needs: run-test
     runs-on: depot-ubuntu-latest # was: ubuntu-latest. Mapped standard GitHub runner to Depot equivalent.
+
     permissions:
       # required for allowing the workflow to request and use an OIDC token for an action or step
       # specifically, we need the below set for depot/build-push-action@v1
       id-token: write
       contents: read # required for actions/checkout
+
     steps:
       - uses: actions/checkout@v6
       - uses: depot/setup-action@v1
@@ -49,3 +59,20 @@ jobs:
           tags: |
             ${{ vars.REGISTRY_URL }}/${{ vars.IMAGE_NAME }}:${{ github.sha }}
             ${{ vars.REGISTRY_URL }}/${{ vars.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+  deploy:
+    name: Deploy to K3s
+    needs: build-container
+    # if: github.ref == 'refs/heads/main'
+    runs-on: depot-ubuntu-latest
+    
+    steps:
+      - name: Setup Blog Kubeconfig
+        run: |
+          KUBECONFIG_FILE="./depot-kubeconfig"
+          trap 'rm -f "$KUBECONFIG_FILE"' EXIT
+
+          echo ${{ secrets.BLOG_KUBECONFIG }} | base64 --decode > "$KUBECONFIG_FILE"
+          chmod 600 "$KUBECONFIG_FILE"
+
+          kubectl --kubeconfig "$KUBECONFIG_FILE" get deploy website-blog
+          kubectl --kubeconfig "$KUBECONFIG_FILE" rollout status deployment/website-blog
