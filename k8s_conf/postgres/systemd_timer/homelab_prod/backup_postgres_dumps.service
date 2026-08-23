@@ -1,0 +1,8 @@
+[Unit]
+Description=Push latest Postgres dump to desktop via Tailscale
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/backup_postgres_dumps.sh

@@ -1,0 +1,8 @@
+[Unit]
+Description=Get the Postgres dump via Tailscale
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/get_postgres_dump.sh

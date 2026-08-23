@@ -1,0 +1,9 @@
+[Unit]
+Description=Get the Postgres dump Wednesday at 2:30 AM
+
+[Timer]
+OnCalendar=Wed *-*-* 02:30:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target

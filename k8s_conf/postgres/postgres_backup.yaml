@@ -1,0 +1,63 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: postgres-backup
+  namespace: default
+spec:
+  schedule: "0 1 * * 3"
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 10
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 518400
+  timeZone: "America/Los_Angeles"
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: pg-backup
+              image: postgres:17
+              env:
+                - name: PGHOST
+                  value: "postgresql.default.svc.cluster.local"
+                - name: PGDATABASE
+                  valueFrom:
+                    secretKeyRef:
+                      name: pg-credentials
+                      key: PG_DATABASE
+                - name: PGUSER
+                  valueFrom:
+                    secretKeyRef:
+                      name: pg-credentials
+                      key: PG_USER
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: pg-credentials
+                      key: PG_PASSWORD
+                - name: PGPORT
+                  valueFrom:
+                    secretKeyRef:
+                      name: pg-credentials
+                      key: PG_PORT
+              command: ["/bin/bash","-lc"]
+              args:
+                - |
+                  set -euo pipefail
+                  ts="$(date +%Y%m%d)"
+                  file="blog_db-${ts}.sql.gz"
+                  out="/backups/${file}"
+
+                  pg_dump --format=custom --no-owner --no-acl -f "$out"
+
+                  echo "Wrote ${out}"
+              volumeMounts:
+                - name: backups
+                  mountPath: /backups
+          volumes:
+            - name: backups
+              hostPath:
+                path: /var/backups/postgres
+                type: DirectoryOrCreate

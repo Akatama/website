@@ -14,17 +14,17 @@ spec:
           secretKeyRef:
             name: pg-credentials
             key: PG_PASSWORD
-      - name: PG_PORT
+      - name: PGPORT
         valueFrom:
           secretKeyRef:
             name: pg-credentials
             key: PG_PORT
-      - name: PG_USER
+      - name: PGUSER
         valueFrom:
           secretKeyRef:
             name: pg-credentials
             key: PG_USER
-      - name: PG_DATABASE
+      - name: PGDATABASE
         valueFrom:
           secretKeyRef:
             name: pg-credentials
