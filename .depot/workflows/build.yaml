@@ -78,7 +78,7 @@ jobs:
           kubectl --kubeconfig "$KUBECONFIG_FILE" -n default get deploy website-blog
 
           kubectl --kubeconfig "$KUBECONFIG_FILE" -n default set image deployment/website-blog \
-            website-blog-depot=${{ vars.REGISTRY_URL }}/${{ vars.IMAGE_NAME }}:${{ github.sha }}
+            website-blog=${{ vars.REGISTRY_URL }}/${{ vars.IMAGE_NAME }}:${{ github.sha }}
 
           if kubectl --kubeconfig "$KUBECONFIG_FILE" -n default rollout status deployment/website-blog --timeout=5m
           then
