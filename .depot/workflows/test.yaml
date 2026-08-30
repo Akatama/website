@@ -1,0 +1,39 @@
+# Depot CI Migration
+# Source: .github/workflows/deploy.yaml
+#
+# Changes made:
+# - Changed GitHub runs-on labels to their Depot equivalents
+
+name: Test
+
+on: push
+jobs:
+  read-oidc:
+    name: Read OIDC
+    runs-on: depot-ubuntu-latest # was: ubuntu-latest. Mapped standard GitHub runner to Depot equivalent.
+
+    permissions:
+      id-token: write
+      contents: read # required for actions/checkout
+
+    steps:
+      - name: Decode Depot OIDC token
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          response="$(
+            curl --fail --silent --show-error \
+              -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+              "$ACTIONS_ID_TOKEN_REQUEST_URL"
+          )"
+
+          token="$(jq -r '.value' <<< "$response")"
+
+          payload="$(cut -d. -f2 <<< "$token")"
+          padding=$(( (4 - ${#payload} % 4) % 4 ))
+          payload="${payload}$(printf '=%.0s' $(seq 1 "$padding"))"
+
+          printf '%s' "$payload" \
+            | base64 --decode 2>/dev/null \
+            | jq .
