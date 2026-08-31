@@ -47,7 +47,7 @@ spec:
                 - |
                   set -euo pipefail
                   ts="$(date +%Y%m%d)"
-                  file="blog_db-${ts}.sql.gz"
+                  file="blog_db-${ts}.backup"
                   out="/backups/${file}"
 
                   pg_dump --format=custom --no-owner --no-acl -f "$out"

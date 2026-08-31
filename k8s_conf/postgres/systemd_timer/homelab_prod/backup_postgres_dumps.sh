@@ -5,7 +5,7 @@ DEST="desktop:"
 SRC_DIR="/var/backups/postgres"
 STATE="/var/backups/postgres/.tailscale_last_sent"
 
-latest="$(ls -1t "${SRC_DIR}"/blog_db-*.sql.gz 2>/dev/null | head -n 1 || true)"
+latest="$(ls -1t "${SRC_DIR}"/blog_db-*.backup 2>/dev/null | head -n 1 || true)"
 [ -n "$latest" ] || exit 0
 
 basename="$(basename "$latest")"

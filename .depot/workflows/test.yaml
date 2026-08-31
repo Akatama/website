@@ -21,7 +21,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          CA_FILE="./k3s-ca.crt"
+          echo ${{ secrets.K8S_CA_B64 }} | base64 --decode > "$CA_FILE"
 
+          # Get the OIDC token
           response="$(
             curl --fail-with-body --silent --show-error \
               -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
@@ -29,12 +32,24 @@ jobs:
               --data-urlencode "audience=k3s-homelab"
           )"
 
-          token="$(jq -r '.value' <<< "$response")"
+          oidc_token="$(jq -r '.value' <<< "$response")"
 
-          payload="$(cut -d. -f2 <<< "$token")"
-          padding=$(( (4 - ${#payload} % 4) % 4 ))
-          payload="${payload}$(printf '=%.0s' $(seq 1 "$padding"))"
+          # use it generate a token for depot-deploy SA
+          deployer_token="$(
+            kubectl \
+            --server="https://${{ secrets.K8S_SERVER }}" \
+              --certificate-authority="$CA_FILE" \
+              --token="$oidc_token" \
+              -n "default" \
+              create token depot-deployer \
+              --duration=10m \
+              --audience="https://kubernetes.default.svc"
+          )"
+          
+          kubectl \
+            --server="https://${{ secrets.K8S_SERVER }}" \
+            --certificate-authority="$CA_FILE" \
+            --token="$deployer_token" \
+            --namespace=default \
+            get deploy website-blog
 
-          printf '%s' "$payload" \
-            | base64 --decode \
-            | jq .
