@@ -36,6 +36,8 @@ jobs:
           OIDC_TOKEN="$(jq -r '.value' <<< "$response")"
           API_SERVER="https://${{ secrets.K8S_SERVER }}"
 
+          tailscale ping --timeout 10s $API_SERVER
+
           # use it generate a token for depot-deploy SA
           DEPLOYER_TOKEN="$(
             kubectl \
