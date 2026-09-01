@@ -44,7 +44,6 @@ jobs:
             fi
             sleep 2
           done
-          tailscale status
 
           # use it generate a token for depot-deploy SA
           DEPLOYER_TOKEN="$(
