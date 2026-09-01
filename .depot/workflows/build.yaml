@@ -4,7 +4,7 @@
 # Changes made:
 # - Changed GitHub runs-on labels to their Depot equivalents
 
-name: Test-Build
+name: Test-Build-Depoly
 
 on: push
 jobs:
@@ -68,19 +68,66 @@ jobs:
     steps:
       - name: Deploy New Container to K3s
         run: |
-          KUBECONFIG_FILE="./depot-kubeconfig"
-          trap 'rm -f "$KUBECONFIG_FILE"' EXIT
+          set -euo pipefail
+          CA_FILE="./k3s-ca.crt"
 
-          echo ${{ secrets.BLOG_KUBECONFIG }} | base64 --decode > "$KUBECONFIG_FILE"
-          chmod 600 "$KUBECONFIG_FILE"
+          echo ${{ secrets.K8S_CA_B64 }} | base64 --decode > "$CA_FILE"
 
+          # Get the OIDC token
+          response="$(
+            curl --fail-with-body --silent --show-error \
+              -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+              --get "$ACTIONS_ID_TOKEN_REQUEST_URL" \
+              --data-urlencode "audience=k3s-homelab"
+          )"
+
+          OIDC_TOKEN="$(jq -r '.value' <<< "$response")"
+          API_SERVER="https://${{ secrets.K8S_SERVER }}"
+
+          for i in $(seq 1 30); do
+            state="$(tailscale status --json 2>/dev/null | jq -r '.BackendState')"
+            echo "Tailscale state: ${state:-unknown} ($i)"
+            if [ "$state" = "Running" ]; then
+              break
+            fi
+            sleep 2
+          done
+
+          # use it generate a token for depot-deploy SA
+          DEPLOYER_TOKEN="$(
+            kubectl \
+            --server="$API_SERVER" \
+            --certificate-authority="$CA_FILE" \
+            --token="$OIDC_TOKEN" \
+            --namespace="default" \
+            create token depot-deployer \
+            --duration=10m \
+            --audience="k3s"
+          )"
+          
           # test to make sure we can access the deployment we want to modify
-          kubectl --kubeconfig "$KUBECONFIG_FILE" -n default get deploy website-blog
+          kubectl \
+            --server="$API_SERVER" \
+            --certificate-authority="$CA_FILE" \
+            --token="$DEPLOYER_TOKEN" \
+            --namespace="default" \
+            get deploy website-blog
 
-          kubectl --kubeconfig "$KUBECONFIG_FILE" -n default set image deployment/website-blog \
+          kubectl \
+            --server="$API_SERVER" \
+            --certificate-authority="$CA_FILE" \
+            --token="$DEPLOYER_TOKEN" \
+            --namespace="default" \
+            set image deployment/website-blog \
             website-blog=${{ vars.REGISTRY_URL }}/${{ vars.IMAGE_NAME }}:${{ github.sha }}
 
-          if kubectl --kubeconfig "$KUBECONFIG_FILE" -n default rollout status deployment/website-blog --timeout=5m
+
+          if kubectl \
+            --server="$API_SERVER" \
+            --certificate-authority="$CA_FILE" \
+            --token="$DEPLOYER_TOKEN" \
+            --namespace="default" \
+            rollout status deployment/website-blog --timeout=5m
           then
             echo "Rollout succeeded"
           else
