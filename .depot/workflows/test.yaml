@@ -55,7 +55,7 @@ jobs:
             --namespace="default" \
             create token depot-deployer \
             --duration=10m \
-            --audience="https://kubernetes.default.svc"
+            --audience="k3s"
           )"
           
           kubectl \
