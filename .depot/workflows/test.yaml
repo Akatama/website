@@ -36,7 +36,6 @@ jobs:
           OIDC_TOKEN="$(jq -r '.value' <<< "$response")"
           API_SERVER="https://${{ secrets.K8S_SERVER }}"
 
-          tailscale ping --timeout 10s $API_SERVER
           for i in $(seq 1 30); do
             state="$(tailscale status --json 2>/dev/null | jq -r '.BackendState')"
             echo "Tailscale state: ${state:-unknown} ($i)"
