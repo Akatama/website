@@ -37,6 +37,15 @@ jobs:
           API_SERVER="https://${{ secrets.K8S_SERVER }}"
 
           tailscale ping --timeout 10s $API_SERVER
+          for i in $(seq 1 30); do
+            state="$(tailscale status --json 2>/dev/null | jq -r '.BackendState')"
+            echo "Tailscale state: ${state:-unknown} ($i)"
+            if [ "$state" = "Running" ]; then
+              break
+            fi
+            sleep 2
+          done
+          tailscale status
 
           # use it generate a token for depot-deploy SA
           DEPLOYER_TOKEN="$(
