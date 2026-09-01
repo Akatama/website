@@ -22,6 +22,7 @@ jobs:
         run: |
           set -euo pipefail
           CA_FILE="./k3s-ca.crt"
+
           echo ${{ secrets.K8S_CA_B64 }} | base64 --decode > "$CA_FILE"
 
           # Get the OIDC token
@@ -32,24 +33,25 @@ jobs:
               --data-urlencode "audience=k3s-homelab"
           )"
 
-          oidc_token="$(jq -r '.value' <<< "$response")"
+          OIDC_TOKEN="$(jq -r '.value' <<< "$response")"
+          API_SERVER="https://${{ secrets.K8S_SERVER }}"
 
           # use it generate a token for depot-deploy SA
-          deployer_token="$(
+          DEPLOYER_TOKEN="$(
             kubectl \
-            --server="https://${{ secrets.K8S_SERVER }}" \
-              --certificate-authority="$CA_FILE" \
-              --token="$oidc_token" \
-              -n "default" \
-              create token depot-deployer \
-              --duration=10m \
-              --audience="https://kubernetes.default.svc"
+            --server="$API_SERVER" \
+            --certificate-authority="$CA_FILE" \
+            --token="$OIDC_TOKEN" \
+            --namespace="default" \
+            create token depot-deployer \
+            --duration=10m \
+            --audience="https://kubernetes.default.svc"
           )"
           
           kubectl \
-            --server="https://${{ secrets.K8S_SERVER }}" \
+            --server="$API_SERVER" \
             --certificate-authority="$CA_FILE" \
-            --token="$deployer_token" \
-            --namespace=default \
+            --token="$DEPLOYER_TOKEN" \
+            --namespace="default" \
             get deploy website-blog
 
