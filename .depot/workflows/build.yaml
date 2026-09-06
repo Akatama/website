@@ -87,6 +87,7 @@ jobs:
           OIDC_TOKEN="$(jq -r '.value' <<< "$response")"
           API_SERVER="https://${{ secrets.K8S_SERVER }}"
 
+          # Wait to connect to tailent
           for i in $(seq 1 30); do
             state="$(tailscale status --json 2>/dev/null | jq -r '.BackendState')"
             echo "Tailscale state: ${state:-unknown} ($i)"
@@ -137,6 +138,11 @@ jobs:
             ROLLOUT_STATUS=$?
 
             echo "Rollout failed with status $ROLLOUT_STATUS; rolling back"
-            kubectl --kubeconfig "$KUBECONFIG_FILE" -n default rollout undo deployment/website-blog
+            kubectl \
+              --server="$API_SERVER" \
+              --certificate-authority="$CA_FILE" \
+              --token="$DEPLOYER_TOKEN" \
+              --namespace="default" \
+              rollout undo deployment/website-blog
             exit "$ROLLOUT_STATUS"
           fi
