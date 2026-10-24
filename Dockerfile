@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   build-essential=12.12 \
   && rm -rf /var/lib/apt/lists/*
 
-COPY --from=ghcr.io/astral-sh/uv:0.7.9 /uv /bin/uv
+COPY --from=ghcr.io/astral-sh/uv:0.13.5 /uv /bin/uv
 
 # UV_COMPILE_BYTECODE=1 is an important startup time optimization
 ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy
