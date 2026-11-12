@@ -6,4 +6,4 @@ After=network-online.target
 [Service]
 Type=oneshot
 EnvironmentFile=/usr/local/sbin/ntfy.env
-ExecStart=/usr/local/sbin/notify-backup-transfer-failure.sh
+ExecStart=/usr/local/sbin/ntfy_backup_transfer_failure.sh
