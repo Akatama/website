@@ -24,3 +24,4 @@ dump.dump
 k8s_conf/automatic_deployment_ci/depot_deployer_kubeconfig.yaml
 k8s_conf/prometheus/ntfy-alerts.yaml
 k8s_conf/postgres/systemd_timer/homelab_prod/ntfy.env
+k8s_conf/postgres/systemd_timer/desktop/ntfy.env
