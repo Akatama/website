@@ -1,0 +1,39 @@
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: AlertmanagerConfig
+metadata:
+  name: ntfy-k3s-alerts
+  namespace: monitoring
+spec:
+  route:
+    receiver: discard
+    routes:
+      - receiver: ntfy-cluster
+        matchers:
+          - name: ntfy_group
+            value: k3s-cluster-health
+            matchType: "="
+      - receiver: ntfy-workload
+        matchers:
+          - name: ntfy_group
+            value: k3s-workload-health
+            matchType: "="
+      - receiver: ntfy-backups
+        matchers:
+          - name: ntfy_group
+            value: k3s-backups
+            matchType: "="
+  receivers:
+    - name: ntfy-cluster
+      webhookConfigs:
+        - url: "https://ntfy.sh/<cluster_topic>?template=yes&title=%7B%7B.commonLabels.alertname%7D%7D&message=Status%3A%20%7B%7B.status%7D%7D%0ASeverity%3A%20%7B%7B.commonLabels.severity%7D%7D%0A%7B%7B.commonAnnotations.summary%7D%7D%0A%7B%7B.commonAnnotations.description%7D%7D"
+          sendResolved: true
+    - name: ntfy-workload
+      webhookConfigs:
+        - url: "https://ntfy.sh/<workload_topic>?template=yes&title=%7B%7B.commonLabels.alertname%7D%7D&message=Status%3A%20%7B%7B.status%7D%7D%0ASeverity%3A%20%7B%7B.commonLabels.severity%7D%7D%0A%7B%7B.commonAnnotations.summary%7D%7D%0A%7B%7B.commonAnnotations.description%7D%7D"
+          sendResolved: true
+    - name: ntfy-backups
+      webhookConfigs:
+        - url: "https://ntfy.sh/<backup_tipic>?template=yes&title=%7B%7B.commonLabels.alertname%7D%7D&message=Status%3A%20%7B%7B.status%7D%7D%0ASeverity%3A%20%7B%7B.commonLabels.severity%7D%7D%0A%7B%7B.commonAnnotations.summary%7D%7D%0A%7B%7B.commonAnnotations.description%7D%7D"
+          sendResolved: true
+    # Drops extra rules Promethues comes with
+    - name: discard

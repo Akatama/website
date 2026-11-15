@@ -1,0 +1,11 @@
+
+prometheus:
+  prometheusSpec:
+    scrapeInterval: 60s  # Default is 30s
+    evaluationInterval: 60s
+
+    additionalScrapeConfigs:
+      - job_name: 'kubernetes-pods'
+        scrape_interval: 120s  # Less frequent for pod metrics
+        kubernetes_sd_configs:
+          - role: pod

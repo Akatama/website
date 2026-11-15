@@ -1,0 +1,9 @@
+[Unit]
+Description=Send message to ntfy when Postgres backup reception fails
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+EnvironmentFile=/usr/local/sbin/ntfy.env
+ExecStart=/usr/local/sbin/ntfy_backup_recieve_failure.sh
