@@ -12,13 +12,15 @@ permissions:
 
 jobs:
   django-probe:
-    uses: tim-schilling/django-probe/.github/workflows/django-probe-submit-uv.yml@0.4.1
-    with:
-      # Path to the Django project to scan, relative to the repository root.
-      path: "."
-      # Environment to gate the submit job behind. Empty submits without an approval gate.
-      environment: ""
-      # Python version for uv to set up. Empty lets uv resolve its own.
-      python-version: "3.14"
-    secrets:
-      DJANGO_PROBE_TOKEN: ${{ secrets.DJANGO_PROBE_TOKEN }}
+    runs-on: depot-ubuntu-latest
+    steps:
+    - uses: tim-schilling/django-probe/.github/workflows/django-probe-submit-uv.yml@0.4.1
+      with:
+        # Path to the Django project to scan, relative to the repository root.
+        path: "."
+        # Environment to gate the submit job behind. Empty submits without an approval gate.
+        environment: ""
+        # Python version for uv to set up. Empty lets uv resolve its own.
+        python-version: "3.14"
+      secrets:
+        DJANGO_PROBE_TOKEN: ${{ secrets.DJANGO_PROBE_TOKEN }}
